@@ -25,7 +25,7 @@ class BluetoothManager: NSObject {
         peripheralManager.stopAdvertising()
         peripheralManager.removeAllServices()
         let service = CBMutableService(type: serviceUUID, primary: true)
-        let characteristic = CBMutableCharacteristic(type: characteristicUUID, properties: .read, value: nil, permissions: .readable)
+        let characteristic = CBMutableCharacteristic(type: characteristicUUID, properties: .notify, value: nil, permissions: .readable)
         service.characteristics = [characteristic]
         peripheralManager.add(service)
     }
@@ -72,6 +72,10 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
         let message = "peripheralManagerDidStartAdvertising " + (error == nil ? "ok" :  ("error " + error!.localizedDescription))
         log(message)
+    }
+    
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        log("peripheralManager didSubscribeTo characteristic")
     }
     
 }
